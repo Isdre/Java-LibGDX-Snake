@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.physics.box2d.*;
 
-public class Node {
+public class Node implements ContactListener{
     public Body body;
     private World _world;
 
@@ -25,6 +25,8 @@ public class Node {
 
         this.body = world.createBody(bodyDef);
         this.body.createFixture(fixtureDef).setUserData(this);
+
+        world.setContactListener(this);
     }
 
     public void setPosition(float x, float y) {
@@ -41,7 +43,23 @@ public class Node {
         }
     }
 
-    public void hit() {
-        System.out.println("Hit!");
+    @Override
+    public void beginContact(Contact contact) {
+        Manager.getInstance().death = true;
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
     }
 }

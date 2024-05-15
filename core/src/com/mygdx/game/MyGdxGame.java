@@ -45,6 +45,10 @@ public class MyGdxGame implements ApplicationListener {
 	public void render () {
 		snake.update();
 
+		if (Manager.getInstance().death) {
+			Gdx.app.exit();
+		}
+
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		camera.update();
