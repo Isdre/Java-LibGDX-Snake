@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Node implements ContactListener{
+    public static int size = 20;
     public Body body;
     private World _world;
 
@@ -17,7 +18,7 @@ public class Node implements ContactListener{
         bodyDef.position.set(x, y);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(10, 10);
+        shape.setAsBox(size, size);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -25,8 +26,6 @@ public class Node implements ContactListener{
 
         this.body = world.createBody(bodyDef);
         this.body.createFixture(fixtureDef).setUserData(this);
-
-        world.setContactListener(this);
     }
 
     public void setPosition(float x, float y) {

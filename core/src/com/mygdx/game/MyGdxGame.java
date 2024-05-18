@@ -2,19 +2,17 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyGdxGame implements ApplicationListener {
 	private OrthographicCamera camera;
@@ -27,10 +25,7 @@ public class MyGdxGame implements ApplicationListener {
 	public void create () {
 		batch = new SpriteBatch();
 
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-
-		camera = new OrthographicCamera(300, 300 * (h / w));
+		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
@@ -40,10 +35,17 @@ public class MyGdxGame implements ApplicationListener {
 
 		snake = new Snake(world,30,30);
 
+		Timer tSnake = new Timer();
+		tSnake.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				snake.update();
+			}
+		}, 1000, 500);
 	}
 
 	public void render () {
-		snake.update();
+		snake.getInput();
 
 		if (Manager.getInstance().death) {
 			Gdx.app.exit();
