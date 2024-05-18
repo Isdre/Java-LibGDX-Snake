@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,7 +24,10 @@ public class MyGdxGame implements ApplicationListener {
 	public void create () {
 		batch = new SpriteBatch();
 
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		float height = Gdx.graphics.getHeight();
+		float width = Gdx.graphics.getWidth();
+
+		camera = new OrthographicCamera(width, height);
 
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
@@ -33,7 +35,7 @@ public class MyGdxGame implements ApplicationListener {
 		world = new World(new Vector2(0, 0), true);
 		debugRenderer = new Box2DDebugRenderer();
 
-		snake = new Snake(world,30,30);
+		snake = new Snake(world,22,22);
 
 		Timer tSnake = new Timer();
 		tSnake.schedule(new TimerTask() {
@@ -42,6 +44,41 @@ public class MyGdxGame implements ApplicationListener {
 				snake.update();
 			}
 		}, 1000, 500);
+
+		//Creating border
+		//Left
+		BodyDef groundBodyDef = new BodyDef();
+		groundBodyDef.position.set(new Vector2(-3, height/2f));
+		Body groundBody = world.createBody(groundBodyDef);
+		PolygonShape groundBox = new PolygonShape();
+		groundBox.setAsBox(1, height);
+		groundBody.createFixture(groundBox, 0.0f);
+		groundBox.dispose();
+		//Right
+		groundBodyDef = new BodyDef();
+		groundBodyDef.position.set(new Vector2(width+3, height/2f));
+		groundBody = world.createBody(groundBodyDef);
+		groundBox = new PolygonShape();
+		groundBox.setAsBox(1, height);
+		groundBody.createFixture(groundBox, 0.0f);
+		groundBox.dispose();
+		//Upwards
+		groundBodyDef = new BodyDef();
+		groundBodyDef.position.set(new Vector2(width/2f, height+3));
+		groundBody = world.createBody(groundBodyDef);
+		groundBox = new PolygonShape();
+		groundBox.setAsBox(width, 1);
+		groundBody.createFixture(groundBox, 0.0f);
+		groundBox.dispose();
+		//Downwards
+		groundBodyDef = new BodyDef();
+		groundBodyDef.position.set(new Vector2(width/2f, -3));
+		groundBody = world.createBody(groundBodyDef);
+		groundBox = new PolygonShape();
+		groundBox.setAsBox(width, 1);
+		groundBody.createFixture(groundBox, 0.0f);
+		groundBox.dispose();
+
 	}
 
 	public void render () {
