@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 public class Node implements ContactListener{
     public static int size = 20;
     public Body body;
-    private World _world;
+    private final World _world;
 
     private Node next;
     static boolean addNode = false;
@@ -44,7 +44,13 @@ public class Node implements ContactListener{
 
     @Override
     public void beginContact(Contact contact) {
-        Manager.getInstance().death = true;
+        System.out.println(contact.getFixtureA().getUserData().getClass());
+        if (contact.getFixtureA().getUserData().getClass().toString().equals("class com.mygdx.game.Fruit")) {
+            addNode = true;
+            Body f = contact.getFixtureA().getBody();
+            Manager.addToDestroy(f);
+        }
+        else Manager.getInstance().death = true;
     }
 
     @Override

@@ -30,8 +30,6 @@ public class Snake {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             System.out.println("Input Right");
             if (_direction != Direction.RIGHT) _direction = Direction.RIGHT;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            Node.addNode = true;
         }
     }
 
